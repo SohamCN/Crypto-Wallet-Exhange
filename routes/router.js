@@ -1,31 +1,13 @@
-import express from 'express'
-import fetch from 'node-fetch'
+const express = require('express')
+const ethereumController = require('../controllers/ethereum-controller.js')
+const route = express.Router()
+route.get('/generate-ethereum-wallet', ethereumController.generateWallet)
+route.get('/generate-ethereum-account-address', ethereumController.generateAccountAddress)
+route.get('/generate-ethereum-privake-key', ethereumController.generatePrivateKey)
+route.get('/get-latest-block', ethereumController.getLatestBlockNumber)
+route.get('/get-block-hash-details', ethereumController.getParticularBlockHashDetails)
+route.get('/get-account-balance-ethereum', ethereumController.getEthereumAccountBalance)
+route.get('/get-transaction-hash', ethereumController.getTransactionHash)
+route.get('/get-outgoing-transactions', ethereumController.getOutgoingTransactions)
 
-var route = express.Router()
-
-route.get('/generate-ethereum-wallet', async(req,res)=>{
-
-    try{//const query = new URLSearchParams({mnemonic: 'string'}).toString();
-    
-    const resp = await fetch(
-      `https://api-eu1.tatum.io/v3/ethereum/wallet`,
-      {
-        method: 'GET',
-        headers: {
-          'x-testnet-type': 'ethereum-ropsten',
-          'x-api-key': '437e4fe2-818f-4a9f-9375-83fc6e72f667'
-        }
-      }
-    );
-    
-    const data = await resp.json();
-    console.log(data);
-    res.status(200).send({message:"Ethereum Wallet Generated Successfully", data})
-    }catch(err){
-        res.status(500).send({
-            error_message: err.message
-        })
-    }
-    })
-
-export default route
+module.exports = route

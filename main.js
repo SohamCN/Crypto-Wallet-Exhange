@@ -1,11 +1,11 @@
-import express from 'express'
+const express = require('express')
 const app = express()
-import dotenv from "dotenv"
-import morgan from 'morgan'
+const dotenv = require("dotenv")
+const morgan = require('morgan')
 
 dotenv.config({ path: 'config.env' })
 
-import Routes from './routes/router.js'
+const Routes = require( './routes/router.js')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
