@@ -9,5 +9,7 @@ route.get('/get-block-hash-details', ethereumController.getParticularBlockHashDe
 route.get('/get-account-balance-ethereum', ethereumController.getEthereumAccountBalance)
 route.get('/get-transaction-hash', ethereumController.getTransactionHash)
 route.get('/get-outgoing-transactions', ethereumController.getOutgoingTransactions)
+route.get('/get-transactions-by-address', ethereumController.getTransactionsByAddress)
+route.get('/send-ethereum', ethereumController.sendEthereum)
 
 module.exports = route

@@ -5,12 +5,15 @@ const morgan = require('morgan')
 
 dotenv.config({ path: 'config.env' })
 
-const Routes = require( './routes/router.js')
+const RoutesCrypto = require( './routes/router')
+const UserAccountRoutes = require('./routes/user-account')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.use('/crypto', Routes)
+app.use('/crypto', RoutesCrypto)
+app.use('/user', UserAccountRoutes)
+
 app.use(morgan('tiny'))
 
 const port = 5000
