@@ -1,9 +1,10 @@
 const fetch = require('node-fetch')
+const EthWalletDb = require('../model/ethWallet')
 
 exports.generateWallet  = async(req,res)=>{
 
   try{//const query = new URLSearchParams({mnemonic: 'string'}).toString();
-  const apiKey = req.body.apiKey
+  const apiKey = '437e4fe2-818f-4a9f-9375-83fc6e72f667'
   const resp = await fetch(
     `https://api-eu1.tatum.io/v3/ethereum/wallet`,
     {
@@ -17,7 +18,19 @@ exports.generateWallet  = async(req,res)=>{
   
   const data = await resp.json();
   console.log(data);
-  res.status(200).send({message:"Ethereum Wallet Generated Successfully", data})
+  res.status(200).send({message:"Ethereum Wallet Generated Successfully", data: data})
+  const wallet = await new EthWalletDb({
+    mnemonic: data.mnemonic,
+    xpub: data.xpub
+  })
+  wallet
+        .save(wallet)
+        .then(walletSavedData=>{
+          console.log(walletSavedData);
+        })
+        .catch(err=>{
+          console.log("walletdataSavingError", err.message)
+        })
   }catch(err){
       res.status(500).send({
           error_message: err.message
