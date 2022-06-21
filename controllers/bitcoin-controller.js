@@ -35,7 +35,7 @@ exports.generateWallet = async(req,res)=>{
     }
 }
 
-exports.generateAccountAddress = async(req,res)=>{
+exports.getAccountAddress = async(req,res)=>{
     try{
         const xpub = req.body.xpub
         const index = req.body.index
@@ -52,14 +52,8 @@ exports.generateAccountAddress = async(req,res)=>{
 const data = await resp.json();
 console.log(data);
 res.status(200).send(data)
-const found = await BtcWalletDb.find({}).select({"xpub":xpub})
-if(found){
-    found.btc_wallet_account_address = await data.address
-    console.log(found);
-    // res.status(200).send(data, found)
-} else{
-    res.status(200).send(data)
-}
+const updated = await BtcWalletDb.findOneAndUpdate({"xpub":xpub},{"btc_wallet_account_address":data.address},{new:true})
+console.log(updated);
     }catch(err){
         res.status(500).send({
             message:err.message
