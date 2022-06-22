@@ -1,6 +1,7 @@
 const express = require('express')
 const ethereumController = require('../controllers/ethereum-controller.js')
 const route = express.Router()
+
 route.get('/generate-ethereum-wallet', ethereumController.generateWallet)
 route.get('/generate-ethereum-account-address', ethereumController.generateAccountAddress)
 route.get('/generate-ethereum-privake-key', ethereumController.generatePrivateKey)
