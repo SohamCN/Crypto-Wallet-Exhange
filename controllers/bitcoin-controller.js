@@ -8,7 +8,7 @@ exports.generateWallet = async(req,res)=>{
             {
               method: 'GET',
               headers: {
-                'x-api-key': req.body.apiKey
+                'x-api-key':'437e4fe2-818f-4a9f-9375-83fc6e72f667'
               }
             }
           );
@@ -44,7 +44,7 @@ exports.getAccountAddress = async(req,res)=>{
   {
     method: 'GET',
     headers: {
-      'x-api-key': req.body.apiKey
+      'x-api-key':'437e4fe2-818f-4a9f-9375-83fc6e72f667'
     }
   }
 );
@@ -321,9 +321,36 @@ res.status(200).send(data)
   }
 }
 
-exports.functionName = async(req,res)=>{
+exports.sendBitcoin = async(req,res)=>{
   try{
-
+    const resp = await fetch(
+      `https://api-eu1.tatum.io/v3/bitcoin/transaction`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': '437e4fe2-818f-4a9f-9375-83fc6e72f667'
+        },
+        body: JSON.stringify({
+          fromAddress: [
+            {
+              address: req.body.fromAddress,
+              privateKey: req.body.fromPrivateKey
+            }
+          ],
+          to: [
+            {
+              address: req.body.toAddress,
+              value: req.body.value
+            }
+          ]
+        })
+      }
+    );
+    
+    const data = await resp.json();
+    console.log(data);
+    res.status(200).send(data)
   }catch(err){
     res.status(500).send({
       message:err.message

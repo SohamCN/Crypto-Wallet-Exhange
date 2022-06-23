@@ -267,8 +267,8 @@ exports.sendEthereum = async(req,res)=>{
           'x-api-key': apiKey
         },
         body: JSON.stringify({
-          data: 'Sending 0.1 ether',
-          nonce: req.body.nonce,
+          data: 'Sending 0.05 ether',
+          //nonce: req.body.nonce,
           to: req.body.account_to_sent_ether_to,
           currency: 'ETH',
           fee: {
