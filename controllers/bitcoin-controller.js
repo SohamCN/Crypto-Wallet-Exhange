@@ -50,9 +50,38 @@ exports.getAccountAddress = async(req,res)=>{
 );
 
 const data = await resp.json();
-console.log(data);
+let address = data.address
+console.log(address);
+let found = await BtcWalletDb.find({"xpub":xpub})
+let addressVerify = await found[0].btc_wallet_account_address
+addressVerify.forEach(async (item)=>{
+  if(item.address===address){
+     return res.status(200).send(data)
+  }else{
+    const updated = await BtcWalletDb.findOneAndUpdate({"xpub":xpub},{
+      $push: {
+        btc_wallet_account_address: {
+          $each: [{address:address}],
+          $position: 0,
+        },
+      },
+    },{new:true})
+    console.log(updated);
+   // res.status(200).send(updated)
+  }
+})
+res.status(200).send(data)
+// let found = await BtcWalletDb.find({"xpub":xpub})
+// let address;
+// console.log("value esche", found[0]);
+// address = await found[0].btc_wallet_account_address;
+// console.log("emptyArray",address);
+// //let updatedAccountDetails = await address.push(data.address)
+// console.log("push-er por",updatedAccountDetails);
 
-let updated = await BtcWalletDb.findOneAndUpdate({"xpub":xpub},{"btc_wallet_account_address":data.address},{new:true})
+// const updated = await BtcWalletDb.findOneAndUpdate({"xpub":xpub},{"btc_wallet_account_address":updatedAccountDetails},{new:true})
+
+
 // let preferredOrder = async(obj, order)=> {
 //   var orderedObject = updated;
 //   for(var i = 0; i < order.length; i++) {
@@ -66,9 +95,6 @@ let updated = await BtcWalletDb.findOneAndUpdate({"xpub":xpub},{"btc_wallet_acco
 //   "_id", "mnemonic","xpub", "btc_wallet_account_address", "__v","createdAt", "updatedAt"
 // ])
   // let array = [...updated]
-
-console.log(updated);
-res.status(200).send(data)
     }catch(err){
         res.status(500).send({
             message:err.message
@@ -358,9 +384,25 @@ exports.sendBitcoin = async(req,res)=>{
   }
 }
 
-exports.functionName = async(req,res)=>{
+exports.broadcastSignedBitcoinTransaction = async(req,res)=>{
   try{
-
+    const resp = await fetch(
+      `https://api-eu1.tatum.io/v3/bitcoin/broadcast`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': '437e4fe2-818f-4a9f-9375-83fc6e72f667'
+        },
+        body: JSON.stringify({
+          txData: '62BD544D1B9031EFC330A3E855CC3A0D51CA5131455C1AB3BCAC6D243F65460D',
+          signatureId: '1f7f7c0c-3906-4aa1-9dfe-4b67c43918f6'
+        })
+      }
+    );
+    const data = await resp.json();
+    console.log(data);
+    res.status(200).send(data);
   }catch(err){
     res.status(500).send({
       message:err.message

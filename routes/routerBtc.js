@@ -16,5 +16,6 @@ route.get('/get-balance', bitcoinController.getBalance)
 route.get('/get-utxo-transaction', bitcoinController.getUTXOTransaction)
 route.get('/get-utxo-transaction', bitcoinController.getUTXOTransaction)
 route.get('/send-bitcoin', bitcoinController.sendBitcoin)
+route.get('/broadcast-signed-transaction', bitcoinController.broadcastSignedBitcoinTransaction)
 
 module.exports = route

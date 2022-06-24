@@ -9,8 +9,12 @@ const btcWalletSchema = new mongoose.Schema({
         type:String,
         required: true
     },
-    btc_wallet_account_address: String,
-    pvt_key: String
+    btc_wallet_account_address:{
+        type:[{address:String}],
+        default:[]
+    },
+    pvt_key:{type:[{key:String}],
+    default:[]}
     },{
         timestamps:true
     })
